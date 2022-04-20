@@ -1,0 +1,5 @@
+server:
+  origin: http://front-end-s3-bucket-hosting.com
+
+db:
+  synchronize: false

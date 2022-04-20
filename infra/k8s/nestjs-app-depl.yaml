@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nestjs-app-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nestjs-app
+  template:
+    metadata:
+      labels:
+        app: nestjs-app
+    spec:
+      containers:
+        - name: nestjs-app
+          image: reddokk/nestjs-app
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://auth-mongo-srv:27017/auth'
+            - name: JWT_SECRET
+              value: 'Secret1234'
+            - name: APP_EXPIRES
+              value: '3600'
+            - name: DB_TYPE
+              value: 'postgres'
+            - name: POSTGRES_HOST
+              value: 'postgres-srv'
+            - name: POSTGRES_PORT
+              value: '5432'
+            - name: DATABASE_USER
+              value: 'postgres'
+            - name: DATABASE_PASSWORD
+              value: 'postgres'
+            - name: DB_NAME
+              value: 'board-app'
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nestjs-app-srv
+spec:
+  selector:
+    app: nestjs-app
+  ports:
+    - name: nestjs-app
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
